@@ -1,0 +1,59 @@
+@use 'color.scss';
+@use 'font.scss';
+.card {
+  position: relative;
+  padding: 0 4em;
+  width: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  z-index: 1;
+  margin-bottom: 2em;
+  &::before {
+    content: '';
+    position: absolute;
+    top: 75%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60%;
+    z-index: -1;
+    height: 7em;
+    background-color: color.$pure-white;
+    border-radius: 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.03);
+  }
+
+  & > .card__image {
+    padding: 0 3em;
+    width: 100%;
+    border-radius: 5px;
+  }
+  & > .card__name {
+    font-family: font.$poppins;
+    font-weight: 700;
+  }
+  & > .card__rarity {
+    font-family: font.$poppins;
+    font-weight: 400;
+    font-size: 0.75rem;
+    color: color.$nice-blue;
+  }
+  & > .card__row_one {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 50%;
+    font-family: font.$poppins;
+    font-weight: 400;
+    font-size: 0.75rem;
+    color: color.$placeholder-color;
+  }
+  & > .card__select {
+    font-family: font.$poppins;
+    font-weight: 400;
+    background-color: color.$yellow-light;
+    padding: 0.5em 2em;
+    border-radius: 25px;
+  }
+}

@@ -1,4 +1,5 @@
 @use './color.scss';
+@use 'font.scss' as *;
 .filter {
   margin-top: 1em;
   padding: 2em;
@@ -6,18 +7,23 @@
   flex-direction: column;
 
   & > input {
+    text-align: center;
+    font-family: $poppins;
+    font-weight: 400;
     background-color: color.$pure-white;
     flex-grow: 4;
     width: 100%;
     border-radius: 100px;
     height: 2em;
     border: none;
-    padding: 1.5em;
+    padding: 1em 1.5em;
     font-size: 1rem;
     &:focus {
       outline: none;
     }
     &::placeholder {
+      font-family: $poppins;
+      font-weight: 400;
       text-align: center;
       font-size: 1rem;
       color: color.$placeholder-color;
@@ -30,7 +36,13 @@
   margin-top: 1em;
   justify-content: space-evenly;
   align-items: space-evenly;
+  z-index: 10;
   & > :not(:first-child) {
     margin-left: 1em;
+  }
+  & > :first-child {
+    font-family: $poppins;
+    font-weight: 400;
+    font-size: 0.8rem;
   }
 }

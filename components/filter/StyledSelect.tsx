@@ -12,7 +12,13 @@ const customStyles: StylesConfig = {
 
 interface StyledSelectProps {
   options: any;
+  placeholder: string;
 }
-export const StyledSelect: FC<StyledSelectProps> = ({ options }) => {
-  return <Select options={options} styles={customStyles} />;
+export const StyledSelect: FC<StyledSelectProps> = ({
+  options,
+  placeholder,
+}) => {
+  return (
+    <Select options={options} styles={customStyles} placeholder={placeholder} />
+  );
 };

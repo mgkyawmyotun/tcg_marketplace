@@ -1,9 +1,30 @@
-import type { NextPage } from 'next';
+import type { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
+import { PokemonTCG } from 'pokemon-tcg-sdk-typescript';
+import { useState } from 'react';
 import favICON from '../assets/favicon.png';
+import { Card } from '../components/card';
 import { Filter } from '../components/filter';
 import { Header } from '../components/header';
-const Home: NextPage = () => {
+import { CardContext } from '../context/CardContext';
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  //prefetch cards data on serverside and render
+  const cards = await PokemonTCG.findCardsByQueries({ page: 1, pageSize: 12 });
+
+  return { props: { cards } };
+};
+interface HomeProps {
+  cards: PokemonTCG.Card[];
+}
+
+const Home: NextPage<HomeProps> = ({ cards: data }) => {
+  const [cards, setCards] = useState(data);
+  const [filterdCard, setFilterdCard] = useState(data);
+
+  function setFilteredValue(values: PokemonTCG.Card[]) {
+    setFilterdCard(values);
+  }
   return (
     <>
       <Head>
@@ -11,7 +32,18 @@ const Home: NextPage = () => {
         <link rel="icon" type="image/png" href={favICON.src}></link>
       </Head>
       <Header />
+
+      <CardContext.Provider
+        value={{
+          intialValue: cards,
+          filteredValue: filterdCard,
+          setFilteredValue: setFilteredValue,
+        }}
+      ></CardContext.Provider>
       <Filter />
+      {cards.map((card, i) => (
+        <Card card={card} key={i} />
+      ))}
     </>
   );
 };

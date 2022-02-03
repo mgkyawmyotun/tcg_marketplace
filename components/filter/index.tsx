@@ -1,3 +1,4 @@
+import { Formik } from 'formik';
 import type { FC } from 'react';
 import React from 'react';
 import styles from '../../styles/filter.module.scss';
@@ -11,12 +12,28 @@ interface FilterProps {}
 export const Filter: FC<FilterProps> = () => {
   return (
     <div className={styles.filter}>
-      <input type="text" placeholder="Name.." />
-      <div className={styles.filter__select}>
-        <StyledSelect options={options} />
-        <StyledSelect options={options} />
-        <StyledSelect options={options} />
-      </div>
+      <Formik
+        initialValues={{
+          name: '',
+          type: '',
+        }}
+        onSubmit={(values) => {
+          console.log(values);
+        }}
+      >
+        {() => {
+          return (
+            <>
+              <input type="text" placeholder="Name.." />
+              <div className={styles.filter__select}>
+                <StyledSelect options={options} placeholder="Type" />
+                <StyledSelect options={options} placeholder="Rarity" />
+                <StyledSelect options={options} placeholder="Set" />
+              </div>
+            </>
+          );
+        }}
+      </Formik>
     </div>
   );
 };
