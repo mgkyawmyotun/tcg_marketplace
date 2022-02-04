@@ -4,4 +4,12 @@ export const CardContext = createContext<{
   intialValue: CardType[];
   filteredValue: CardType[];
   setFilteredValue: (values: CardType[]) => void;
-}>({ intialValue: [], filteredValue: [], setFilteredValue: () => {} });
+  pageNumber: number;
+  loadMore: () => void;
+}>({
+  intialValue: [],
+  filteredValue: [],
+  setFilteredValue: () => {},
+  pageNumber: 1,
+  loadMore: () => {},
+});

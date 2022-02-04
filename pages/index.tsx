@@ -6,11 +6,15 @@ import favICON from '../assets/favicon.png';
 import { Card } from '../components/card';
 import { Filter } from '../components/filter';
 import { Header } from '../components/header';
+import { LoadMore } from '../components/loadmore';
 import { CardContext } from '../context/CardContext';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   //prefetch cards data on serverside and render
-  const cards = await PokemonTCG.findCardsByQueries({ page: 1, pageSize: 12 });
+  const cards = await PokemonTCG.findCardsByQueries({
+    page: 1,
+    pageSize: 12,
+  });
   const sets = await (await PokemonTCG.getAllSets()).map((value) => value.name);
   const types = await PokemonTCG.getTypes();
   const rarities = await PokemonTCG.getRarities();
@@ -27,10 +31,24 @@ interface HomeProps {
 const Home: NextPage<HomeProps> = ({ cards: data, sets, types, rarities }) => {
   const [cards, setCards] = useState(data);
   const [filterdCard, setFilterdCard] = useState(data);
+  const [pageNumber, setPageNumber] = useState(2);
 
   function setFilteredValue(values: PokemonTCG.Card[]) {
     setFilterdCard(values);
   }
+  async function loadMore() {
+    const result = await fetch('api/cards?p=' + pageNumber);
+    const data = await result.json();
+    setCards((c) => {
+      c.push(...data);
+      setFilterdCard(c);
+      return c;
+    });
+    // setPageNumber((value) => ++value);
+
+    setPageNumber((value) => value + 1);
+  }
+
   return (
     <>
       <Head>
@@ -44,12 +62,15 @@ const Home: NextPage<HomeProps> = ({ cards: data, sets, types, rarities }) => {
           intialValue: cards,
           filteredValue: filterdCard,
           setFilteredValue: setFilteredValue,
+          pageNumber: pageNumber,
+          loadMore,
         }}
       >
         <Filter sets={sets} rarities={rarities} types={types} />
         {filterdCard.map((card, i) => (
           <Card card={card} key={i} />
         ))}
+        <LoadMore />
       </CardContext.Provider>
     </>
   );

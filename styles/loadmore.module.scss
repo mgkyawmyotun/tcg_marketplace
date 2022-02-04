@@ -1,0 +1,17 @@
+@use 'color';
+@use 'font';
+.load_more {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-family: font.$poppins;
+  font-weight: 400;
+  color: #6a6969;
+  margin-bottom: 3em;
+  & > svg {
+    width: 1em;
+    height: 1em;
+    margin-right: 0.25em;
+  }
+}
