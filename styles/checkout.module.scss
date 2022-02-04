@@ -1,0 +1,31 @@
+@use 'color' as color;
+.checkout_button {
+  color: color.$pure-white;
+  position: fixed;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  bottom: 0;
+  margin-bottom: 1em;
+  left: 50%;
+  transform: translateX(-50%);
+
+  background-color: #298bfd;
+  padding: 0.5em 1em;
+  border-radius: 10px;
+  & > .docker {
+    position: absolute;
+    left: 0;
+    top: 0;
+    transform: translate(-50%, -50%);
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: red;
+    width: 1em;
+    height: 1em;
+    border-radius: 50%;
+  }
+}

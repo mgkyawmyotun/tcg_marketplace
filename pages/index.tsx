@@ -1,13 +1,16 @@
 import type { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import { PokemonTCG } from 'pokemon-tcg-sdk-typescript';
+import { Card as CardType } from 'pokemon-tcg-sdk-typescript/dist/sdk';
 import { useState } from 'react';
 import favICON from '../assets/favicon.png';
 import { Card } from '../components/card';
+import { CheckOutButton } from '../components/checkout/Button';
 import { Filter } from '../components/filter';
 import { Header } from '../components/header';
 import { LoadMore } from '../components/loadmore';
 import { CardContext } from '../context/CardContext';
+import { CartContext } from '../context/CartContext';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   //prefetch cards data on serverside and render
@@ -32,6 +35,7 @@ const Home: NextPage<HomeProps> = ({ cards: data, sets, types, rarities }) => {
   const [cards, setCards] = useState(data);
   const [filterdCard, setFilterdCard] = useState(data);
   const [pageNumber, setPageNumber] = useState(2);
+  const [cart, setCart] = useState<CardType[]>([]);
 
   function setFilteredValue(values: PokemonTCG.Card[]) {
     setFilterdCard(values);
@@ -44,7 +48,6 @@ const Home: NextPage<HomeProps> = ({ cards: data, sets, types, rarities }) => {
       setFilterdCard(c);
       return c;
     });
-    // setPageNumber((value) => ++value);
 
     setPageNumber((value) => value + 1);
   }
@@ -66,11 +69,20 @@ const Home: NextPage<HomeProps> = ({ cards: data, sets, types, rarities }) => {
           loadMore,
         }}
       >
+        <CartContext.Provider
+          value={{
+            cart,
+            addToCart: (card) => {
+              setCart((cart) => [...cart, card]);
+            },
+          }}
+        ></CartContext.Provider>
         <Filter sets={sets} rarities={rarities} types={types} />
         {filterdCard.map((card, i) => (
           <Card card={card} key={i} />
         ))}
         <LoadMore />
+        <CheckOutButton />
       </CardContext.Provider>
     </>
   );

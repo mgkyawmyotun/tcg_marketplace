@@ -1,12 +1,12 @@
 import { Card as CardType } from 'pokemon-tcg-sdk-typescript/dist/sdk';
-import type { FC } from 'react';
-import React from 'react';
+import React, { FC, useState } from 'react';
 import styles from '../../styles/card.module.scss';
 
 interface CardProps {
   card: CardType;
 }
 export const Card: FC<CardProps> = ({ card }) => {
+  const [select, setSelect] = useState(false);
   return (
     <div className={styles.card}>
       <img src={card.images.large} alt="" className={styles.card__image} />
@@ -18,7 +18,14 @@ export const Card: FC<CardProps> = ({ card }) => {
         </div>
         <div className={styles.card__stock}>{card.set.total} left</div>
       </div>
-      <div className={styles.card__select}>Select card</div>
+      <div
+        className={` ${select ? styles.card__selected : styles.card__select}`}
+        onClick={() => {
+          setSelect((v) => !v);
+        }}
+      >
+        {select ? 'Selected' : 'Select card'}
+      </div>
     </div>
   );
 };
