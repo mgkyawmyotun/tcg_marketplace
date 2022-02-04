@@ -75,14 +75,18 @@ const Home: NextPage<HomeProps> = ({ cards: data, sets, types, rarities }) => {
             addToCart: (card) => {
               setCart((cart) => [...cart, card]);
             },
+            removeCardFromCart: (card_id: string) => {
+              setCart((cart) => cart.filter((card) => card.id !== card_id));
+            },
           }}
-        ></CartContext.Provider>
-        <Filter sets={sets} rarities={rarities} types={types} />
-        {filterdCard.map((card, i) => (
-          <Card card={card} key={i} />
-        ))}
-        <LoadMore />
-        <CheckOutButton />
+        >
+          <Filter sets={sets} rarities={rarities} types={types} />
+          {filterdCard.map((card, i) => (
+            <Card card={card} key={i} />
+          ))}
+          <LoadMore />
+          <CheckOutButton />
+        </CartContext.Provider>
       </CardContext.Provider>
     </>
   );

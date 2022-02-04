@@ -1,5 +1,6 @@
 import { Card as CardType } from 'pokemon-tcg-sdk-typescript/dist/sdk';
-import React, { FC, useState } from 'react';
+import React, { FC, useContext, useEffect, useState } from 'react';
+import { CartContext } from '../../context/CartContext';
 import styles from '../../styles/card.module.scss';
 
 interface CardProps {
@@ -7,6 +8,15 @@ interface CardProps {
 }
 export const Card: FC<CardProps> = ({ card }) => {
   const [select, setSelect] = useState(false);
+  const { addToCart, removeCardFromCart } = useContext(CartContext);
+  useEffect(() => {
+    if (select) {
+      addToCart(card);
+      return;
+    }
+    removeCardFromCart(card.id);
+  }, [select]);
+
   return (
     <div className={styles.card}>
       <img src={card.images.large} alt="" className={styles.card__image} />
