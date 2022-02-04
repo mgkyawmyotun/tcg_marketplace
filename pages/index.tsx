@@ -11,14 +11,20 @@ import { CardContext } from '../context/CardContext';
 export const getServerSideProps: GetServerSideProps = async (context) => {
   //prefetch cards data on serverside and render
   const cards = await PokemonTCG.findCardsByQueries({ page: 1, pageSize: 12 });
-
-  return { props: { cards } };
+  const sets = await (await PokemonTCG.getAllSets()).map((value) => value.name);
+  const types = await PokemonTCG.getTypes();
+  const rarities = await PokemonTCG.getRarities();
+  return { props: { cards, sets, types, rarities } };
 };
+
 interface HomeProps {
   cards: PokemonTCG.Card[];
+  sets: string[];
+  types: PokemonTCG.Type[];
+  rarities: PokemonTCG.Rarity[];
 }
 
-const Home: NextPage<HomeProps> = ({ cards: data }) => {
+const Home: NextPage<HomeProps> = ({ cards: data, sets, types, rarities }) => {
   const [cards, setCards] = useState(data);
   const [filterdCard, setFilterdCard] = useState(data);
 
@@ -39,11 +45,12 @@ const Home: NextPage<HomeProps> = ({ cards: data }) => {
           filteredValue: filterdCard,
           setFilteredValue: setFilteredValue,
         }}
-      ></CardContext.Provider>
-      <Filter />
-      {cards.map((card, i) => (
-        <Card card={card} key={i} />
-      ))}
+      >
+        <Filter sets={sets} rarities={rarities} types={types} />
+        {filterdCard.map((card, i) => (
+          <Card card={card} key={i} />
+        ))}
+      </CardContext.Provider>
     </>
   );
 };
